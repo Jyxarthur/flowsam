@@ -5,7 +5,7 @@ import glob as gb
 
 data_path = '/path/to/dataset/'
 rgb_path = data_path + '/JPEGImages'  
-# '/JPEGImages/480p' for DAVIS16 & DAVIS17-motion and '/JPEGImages' for others
+# '/JPEGImages/480p' for DAVIS-related datasets and '/JPEGImages' for others
 
 gap = [1]
 reverse = [0, 1]
