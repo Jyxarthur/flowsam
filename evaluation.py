@@ -178,8 +178,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--rgb_encoder_ckpt_path', 
         type=str,
-        default="/work/jyx/sam_model/sam_vit_h_4b8939.pth",
-        help="ckpt path of SAM image encoder to take in rgb",
+        default="/path/to/sam_vit_h_4b8939.pth",
+        help="ckpt path of SAM image encoder to take in rgb, the ckpt can be downloaded from the official SAM repo (https://github.com/facebookresearch/segment-anything/)",
     )
     parser.add_argument(
         '--flow_encoder', 
@@ -190,8 +190,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--flow_encoder_ckpt_path', 
         type=str,
-        default="/work/jyx/sam_model/sam_vit_b_01ec64.pth",
-        help="ckpt path of SAM image encoder to take in flow",
+        default="/path/to/sam_vit_b_01ec64.pth",
+        help="ckpt path of SAM image encoder to take in flow, the ckpt can be downloaded from the official SAM repo (https://github.com/facebookresearch/segment-anything/)",
     )
 
     # Input configuration

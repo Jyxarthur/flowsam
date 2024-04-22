@@ -45,10 +45,9 @@ The data paths can be specified in ```data/dataset_config.py```.
 
 
 ## Checkpoints and results
+* The pretrained original SAM checkpoints can be downloaded [here](https://github.com/facebookresearch/segment-anything/)
+* The pretrained flowsam model checkpoints can be downloaded [here](https://drive.google.com/drive/folders/16I6zjJI4FCxhdGVIXgDddC5c64raKEuu?usp=sharing).
 * Our predicted masks on benchmarks datasets can be found [here](https://drive.google.com/drive/folders/18dl-1_HHxlVNoav-ZNQmyZekm8JXMiAF?usp=sharing).
-* The pretrained model checkpoints can be downloaded [here](https://drive.google.com/drive/folders/16I6zjJI4FCxhdGVIXgDddC5c64raKEuu?usp=sharing).
-
-
 
 ## Inference
 To run FlowI-SAM,

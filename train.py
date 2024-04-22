@@ -172,9 +172,6 @@ def train_flowpsam(args, train_loader, flowsam, val_loader=None, val_loader_cent
      
 
 if __name__ == '__main__':
-    """
-    python train.py --batch_size=4 --accum_step 2 --dataset=dvs17m --model_save_path=/work/jyx/samf_results_multiflowrgb_fpenhance_1+4prompt_2layers/devtmp
-    """
     parser = ArgumentParser()
     # Training information
     parser.add_argument(
@@ -238,8 +235,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--rgb_encoder_ckpt_path', 
         type=str,
-        default="/work/jyx/sam_model/sam_vit_h_4b8939.pth",
-        help="ckpt path of SAM image encoder to take in rgb",
+        default="/path/to/sam_vit_h_4b8939.pth",
+        help="ckpt path of SAM image encoder to take in rgb, the ckpt can be downloaded from the official SAM repo (https://github.com/facebookresearch/segment-anything/)",
     )
     parser.add_argument(
         '--flow_encoder', 
@@ -250,8 +247,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--flow_encoder_ckpt_path', 
         type=str,
-        default="/work/jyx/sam_model/sam_vit_b_01ec64.pth",
-        help="ckpt path of SAM image encoder to take in flow",
+        default="/path/to/sam_vit_b_01ec64.pth",
+        help="ckpt path of SAM image encoder to take in flow, the ckpt can be downloaded from the official SAM repo (https://github.com/facebookresearch/segment-anything/)",
     )
     # Input configuration
     parser.add_argument(
