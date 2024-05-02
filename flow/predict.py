@@ -97,7 +97,6 @@ def predict_batch(args):
     folder = os.path.basename(args.path)
     floout = os.path.join(args.outroot, folder)
     rawfloout = os.path.join(args.raw_outroot, folder)
-    print(folder, floout, rawfloout)
     os.makedirs(floout, exist_ok=True)
     os.makedirs(rawfloout, exist_ok=True)
 
