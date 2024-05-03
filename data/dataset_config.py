@@ -170,9 +170,9 @@ def config_eval_dataloader(args):
         val_loader = DataLoader(val_dataset, num_workers=8, batch_size=1, shuffle=False, pin_memory=True, drop_last=False)
 
     elif args.dataset == "example":  # No annotations (annotation path) given
-        val_data_dirs = ["output/flow/FlowImages_gap1", 
-                        "output/images"]
-        val_seq = ['sample'] 
+        val_data_dirs = [f"{args.flow_output}", 
+                        f"{args.img_output}"]
+        val_seq = [args.name] 
         val_dataset = Example_eval_dataset(data_dirs=val_data_dirs, seqs=val_seq, ref_sam=ref_sam, 
                                             dataset=args.dataset, flow_gaps=flow_gaps, num_gridside=args.num_gridside)
         val_loader = DataLoader(val_dataset, num_workers=8, batch_size=1, shuffle=False, pin_memory=True, drop_last=False)

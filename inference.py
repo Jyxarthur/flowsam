@@ -99,12 +99,20 @@ def inference(args):
     download_weight(rgb_encoder_ckpt_path, 'https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth')
     flow_encoder_ckpt_path = 'sam_vit_b_01ec64.pth'
     download_weight(flow_encoder_ckpt_path, 'https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth')
+    # Split the path into directory and filename
+    directory, filename = os.path.split(args.video_output_path)
+    flow_path = os.path.join(args.flow_output_path, f'FlowImages_gap1')
     os.system("python evaluation.py "
                 "--model flowpsam --ckpt {} --rgb_encoder_ckpt_path {} --flow_encoder_ckpt_path {} --flow_gaps 1 "
-                "--dataset example --save_path {}".format(ckpt, rgb_encoder_ckpt_path, flow_encoder_ckpt_path, args.flowsam_output_path))
+                "--dataset example --flow_output {} --img_output {} --name {} --max_obj 1 --save_path {}".format(
+                    ckpt, rgb_encoder_ckpt_path, flow_encoder_ckpt_path, \
+                    flow_path, directory, filename, args.flowsam_output_path)
+            )
 
 """
 python inference.py --video_file_path sample.mp4 --video_output_path output/images/sample --extract_frames --flow_output_path output/flow --extract_flow --visualize_flow --run_flowsam --flowsam_output_path output --visualize_output
+python inference.py --video_file_path siren.mp4 --video_output_path output/images/siren --extract_frames --flow_output_path output/flow --extract_flow --visualize_flow --run_flowsam --flowsam_output_path output --visualize_output
+python inference.py --video_file_path highway.mp4 --video_output_path output/images/highway --extract_frames --flow_output_path output/flow --extract_flow --visualize_flow --run_flowsam --flowsam_output_path output --visualize_output
 """
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -121,11 +129,11 @@ if __name__ == '__main__':
     parser.add_argument('--visualize_output', action='store_true', help='whether to run flow ')
     args = parser.parse_args()
 
-    if args.extract_frames:
-        extract_frames(args.video_file_path, args.video_output_path)
-
     # Split the path into directory and filename
     directory, filename = os.path.split(args.video_output_path)
+
+    if args.extract_frames:
+        extract_frames(args.video_file_path, args.video_output_path)
 
     if args.extract_flow:
         extract_flow(directory, args.flow_output_path)
