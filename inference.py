@@ -4,34 +4,46 @@ import argparse
 import cv2
 import os
 import requests
+from PIL import Image
 
 def extract_frames(video_path, output_folder):
     # Create the output folder if it doesn't exist
     os.makedirs(output_folder, exist_ok=True)
-    
-    # Open the video file
-    cap = cv2.VideoCapture(video_path)
-    
-    # Variable to keep track of frame count
-    frame_count = 0
-    
-    # Read frames until there are no more
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            break
-        
-        # Save the frame as an image
-        frame_path = os.path.join(output_folder, f"{frame_count+1:05d}.jpg")
-        cv2.imwrite(frame_path, frame)
-        
-        frame_count += 1
 
-    # Release the video capture object
-    cap.release()
+    if video_path.endswith(".gif"):
+        with Image.open(video_path) as img:
+            while True:
+                try:
+                    frame_count = img.tell()
+                    frame_img = img.convert("RGB")
+                    frame_img.save(os.path.join(output_folder, f"{frame_count+1:05d}.jpg"))
+                    img.seek(frame_count + 1)
+                except EOFError:
+                    break
+    else:
+        # Open the video file
+        cap = cv2.VideoCapture(video_path)
+        
+        # Variable to keep track of frame count
+        frame_count = 0
+        
+        # Read frames until there are no more
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                break
+            
+            # Save the frame as an image
+            frame_path = os.path.join(output_folder, f"{frame_count+1:05d}.jpg")
+            cv2.imwrite(frame_path, frame)
+            
+            frame_count += 1
+
+        # Release the video capture object
+        cap.release()
 
 def extract_flow(rgb_path, flow_output_path):
-    gap = [1]
+    gap = [1, 2]
     reverse = [0, 1]
     batch_size = 4
 
@@ -103,8 +115,8 @@ def inference(args):
     directory, filename = os.path.split(args.video_output_path)
     flow_path = os.path.join(args.flow_output_path, f'FlowImages_gap1')
     os.system("python evaluation.py "
-                "--model flowpsam --ckpt {} --rgb_encoder_ckpt_path {} --flow_encoder_ckpt_path {} --flow_gaps 1 "
-                "--dataset example --flow_output {} --img_output {} --name {} --max_obj 1 --save_path {}".format(
+                "--model flowpsam --ckpt {} --rgb_encoder_ckpt_path {} --flow_encoder_ckpt_path {} --flow_gaps 1,-1,2,-2 --num_gridside 20 "
+                "--dataset example --flow_output {} --img_output {} --name {} --max_obj 3 --save_path {}".format(
                     ckpt, rgb_encoder_ckpt_path, flow_encoder_ckpt_path, \
                     flow_path, directory, filename, args.flowsam_output_path)
             )
@@ -113,6 +125,7 @@ def inference(args):
 python inference.py --video_file_path sample.mp4 --video_output_path output/images/sample --extract_frames --flow_output_path output/flow --extract_flow --visualize_flow --run_flowsam --flowsam_output_path output --visualize_output
 python inference.py --video_file_path siren.mp4 --video_output_path output/images/siren --extract_frames --flow_output_path output/flow --extract_flow --visualize_flow --run_flowsam --flowsam_output_path output --visualize_output
 python inference.py --video_file_path highway.mp4 --video_output_path output/images/highway --extract_frames --flow_output_path output/flow --extract_flow --visualize_flow --run_flowsam --flowsam_output_path output --visualize_output
+python inference.py --video_file_path bird.gif --video_output_path output/images/bird --extract_frames --flow_output_path output/flow --extract_flow --visualize_flow --run_flowsam --flowsam_output_path output --visualize_output
 """
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
