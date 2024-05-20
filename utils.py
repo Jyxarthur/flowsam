@@ -115,4 +115,40 @@ def update_iousummary(masks_hung, masks_nonhung, anno, num_obj, path, iou_summar
         save_indexed(os.path.join(save_path_nonhung, path[0]), saved_mask_nonhung.astype(np.uint8))
     return iou_summary
 
+def remove_overlapping_masks(masks, filter=False):
+    result_mask = masks.copy()
+    for i in range(result_mask.shape[0] - 1):
+        result_mask[i+1:] = np.logical_and(result_mask[i+1:], np.logical_not(masks[i]))
+    result_mask = np.clip(result_mask, 0 ,1)
+    return result_mask
 
+def warp_flow(curImg, flow):
+    H, W = np.shape(curImg)
+    flow = cv2.resize(flow, (W, H))
+    h, w = flow.shape[:2]
+    flow = flow
+    flow[:,:,0] += np.arange(w)
+    flow[:,:,1] += np.arange(h)[:,np.newaxis]
+    prevImg = cv2.remap(curImg, flow, None, cv2.INTER_LINEAR)
+    return prevImg
+
+def hungarian_iou(masks, gt, thres = 0.5, emp=False):
+    masks = (masks>thres)
+    gt = (gt>thres)
+    ious = iou(gt[:, None], masks[None], emp=False)
+    g, p = np.shape(ious)
+
+    orig_idx, hung_idx = linear_sum_assignment(-ious)
+    out = ious[orig_idx, hung_idx]
+    return out, masks[hung_idx] * 1.
+
+def seq_hungarian_iou(masks, gts, thres = 0.5):
+    g, h, w = np.shape(gts[0])
+    p = np.shape(masks[0])[0]
+    ious = np.zeros([g, 20])
+    num_seq = len(gts)
+    for i in range(num_seq):
+        ious = ious + iou(gts[i][:, None], np.concatenate([masks[i], np.zeros([20-p,h,w])], 0)[None])
+    orig_idx, hung_idx = linear_sum_assignment(-ious)
+    out = ious[orig_idx, hung_idx] / num_seq
+    return out, 0
