@@ -14,15 +14,24 @@ def is_bg_mask(
     return masks_edge > thres
 
 
-def iou(gt, masks, thres=0.5, emp=True):
+def iou(masks, gt, thres=0.5, emp=True):
     """ IoU predictions """
-    masks = (masks>thres)
-    gt = (gt>thres)
-    intersect = (masks * gt).sum((-1,-2))
-    union = masks.sum((-1,-2)) + gt.sum((-1,-2)) - intersect
-    empty = (union < 1e-6) if emp else 0
-    iou = np.clip(intersect/(union + 1e-12) + empty, 0., 1.)
-    return iou
+    if isinstance(masks, torch.Tensor): # for tensor inputs
+        masks = (masks>thres).float()
+        gt = (gt>thres).float()
+        intersect = (masks * gt).sum(dim=[-2, -1])
+        union = masks.sum(dim=[-2, -1]) + gt.sum(dim=[-2, -1]) - intersect
+        empty = (union < 1e-6).float()
+        iou = torch.clip(intersect/(union + 1e-12) + empty, 0., 1.)
+        return iou
+    else: # for numpy inputs
+        masks = (masks>thres)
+        gt = (gt>thres)
+        intersect = (masks * gt).sum((-1,-2))
+        union = masks.sum((-1,-2)) + gt.sum((-1,-2)) - intersect
+        empty = (union < 1e-6) if emp else 0
+        iou = np.clip(intersect/(union + 1e-12) + empty, 0., 1.)
+        return iou
 
 
 
