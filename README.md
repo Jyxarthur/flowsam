@@ -111,10 +111,10 @@ where ```--model``` specifies the model to be trained (```flowisam``` or ```flow
 ## Citation
 If you find this repository helpful, please consider citing our work:
 ```
-@article{xie2024flowsam,
+@InProceedings{xie2024flowsam,
   title={Moving Object Segmentation: All You Need Is SAM (and Flow)},
   author={Junyu Xie and Charig Yang and Weidi Xie and Andrew Zisserman},
-  journal={arXiv preprint arXiv:2404.12389},
+  booktitle={ACCV},
   year={2024}
 }
 ```
