@@ -34,7 +34,7 @@ pip install git+https://github.com/facebookresearch/segment-anything.git
 * **DAVIS2017-motion** has the same sequences with DAVIS2017, but the annotations are curated to cater for jointly moving objects, which can be downloaded from [here](https://drive.google.com/drive/folders/16zqUO1WuAp8Am4Giitc9hn2rMao6x_MA?usp=sharing).
 #### Evaluation datasets
 * **DAVIS datasets** can be obtained following the instructions above.
-* **YTVOS2018-motion** is a subset selected from *training split* of YTVOS2018. These selected sequences are used for *evaluation*, with predominantly moving objects involved (*i.e.,* objects can be discovered based on their motion). The list of selected sequences can be found [here]().
+* **YTVOS2018-motion** is a subset selected from *training split* of YTVOS2018. These selected sequences are used for *evaluation*, with predominantly moving objects involved (*i.e.,* objects can be discovered based on their motion). The list of selected sequences can be found [here](https://github.com/Jyxarthur/appear-refine/blob/main/resources/ytvos18m_seq.json).
 * Other datasets such as **SegTrackv2**, **FBMS-59** and **MoCA_filter** can be downloaded and preprocessed following the protocol described in [motiongrouping](https://github.com/charigyang/motiongrouping).
 #### Optical flow estimation
 In this work, optical flow is estimated by [RAFT](https://github.com/princeton-vl/RAFT), with the code provided in the ```flow``` folder.
