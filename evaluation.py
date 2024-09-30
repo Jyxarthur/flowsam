@@ -213,7 +213,24 @@ if __name__ == '__main__':
         choices=['dvs17', 'dvs17m', 'dvs16', 'ytvos', 'example'],
         help="evaluation datasets",
     )  
-
+    parser.add_argument(
+        '--flow_output', 
+        type=str,
+        default="output/flow/FlowImages_gap1/sample",
+        help="flow frame gaps, a string without spacing",
+    ) 
+    parser.add_argument(
+        '--img_output', 
+        type=str,
+        default="output/images/sample",
+        help="flow frame gaps, a string without spacing",
+    ) 
+    parser.add_argument(
+        '--name', 
+        type=str,
+        default="sample",
+        help="flow frame gaps, a string without spacing"
+    )
     # Output configuration
     parser.add_argument(
         '--max_obj', 
@@ -236,7 +253,7 @@ if __name__ == '__main__':
         '--save_path', 
         default=None,
         help="path to save masks",
-    )   
+    )
 
     args = parser.parse_args()
 
