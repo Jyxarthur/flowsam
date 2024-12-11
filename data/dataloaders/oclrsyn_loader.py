@@ -31,8 +31,9 @@ class OCLRsyn_dataset(Dataset):
         amodal_mask_inputs = True
     ):
         self.flow_dir = data_dirs[0]
+        self.amodal_mask_inputs = amodal_mask_inputs
         # Check if the annotation directory is for amodal segmentation
-        if amodal_mask_inputs and "AmodalAnnotations" not in data_dirs[1]:
+        if self.amodal_mask_inputs and "AmodalAnnotations" not in data_dirs[1]:
             self.anno_dir = data_dirs[1].replace("Annotations", "AmodalAnnotations")
         else:
             self.anno_dir = data_dirs[1]              
@@ -98,7 +99,10 @@ class OCLRsyn_dataset(Dataset):
         rgb_image_torch = rgb_image_torch.permute(2, 0, 1).contiguous()
         rgb_image = self.preprocess(rgb_image_torch)  #3 1024 1024
         
-        annos = [anno_ for anno_ in list(processMultiAmodalSeg(self.anno_paths[idx], gt_resolution = original_size, with_bg = True)) if np.sum(anno_) > 0]
+        if self.amodal_mask_inputs:
+            annos = [anno_ for anno_ in list(processMultiAmodalSeg(self.anno_paths[idx], gt_resolution = original_size, with_bg = True)) if np.sum(anno_) > 0]
+        else:
+            annos = [anno_ for anno_ in list(processMultiSeg(self.anno_paths[idx], gt_resolution = original_size, with_bg = True)) if np.sum(anno_) > 0]
 
         # Select a random object
         anno_random_idx = random.choice(list(np.arange(len(annos))))
