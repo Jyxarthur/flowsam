@@ -1,5 +1,6 @@
 import sys
 sys.path.append('core')
+sys.path.append('flow/core')
 
 import os
 import cv2
